@@ -2,13 +2,13 @@
 
 This boilerplate gives you all you need to start a new custom widget for Mendix 5.
 
-The boilerplate containes:
+The boilerplate contains:
 
 - Directory structure.
 - Readme.md file.
 - License.
 - Javascript source.
-- XSD for package.xml, to configure properties of the widget visible inside de Mendix business modeler.
+- XSD for package.xml, to configure properties of the widget, visible inside de Mendix business modeler.
 
 ## Contributing
 
