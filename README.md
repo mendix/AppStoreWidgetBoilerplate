@@ -1,13 +1,14 @@
 # App Store Widget Boilerplate
 
-This boilerplate gives you all you need to start a new widget for the Mendix 5 template.
+This boilerplate gives you all you need to start a new widget for Mendix 5.
+
 The boilerplate containes:
 
 - Directory structure.
 - Readme.md file.
 - License.
 - Javascript source.
-- XSD for package.xml.
+- XSD for package.xml, to configure properties of the widget visible inside de Mendix business modeler.
 
 ## Contributing
 
