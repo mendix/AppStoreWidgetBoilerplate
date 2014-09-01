@@ -3,10 +3,11 @@
 This boilerplate gives you all you need to start a new widget for the Mendix 5 template.
 The boilerplate containes:
 
-- Directory structure
-- Readme.md file
-- License
-- Javascript source
+- Directory structure.
+- Readme.md file.
+- License.
+- Javascript source.
+- XSD for package.xml.
 
 ## Contributing
 
@@ -21,11 +22,11 @@ Alter this README.md file and describe what your widget does.
 
 The javascript inside the widget has examples of:
 
-- Using CSS within a Widget
-- Using templating
-- Loading external library's
-- DOM manipulation
-- Event attaching
-- Loading data
-- Executing workflow and sending data
+- Using CSS within a Widget.
+- Using templating.
+- Loading external library's.
+- DOM manipulation.
+- Event attaching.
+- Loading data.
+- Executing microflow and sending data.
 - Working with the context object (The object that is send by a contextview , for instance a dataview).
