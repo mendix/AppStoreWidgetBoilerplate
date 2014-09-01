@@ -6,6 +6,7 @@ The boilerplate containes:
 - Directory structure
 - Readme.md file
 - License
+- Javascript source
 
 ## Contributing
 
