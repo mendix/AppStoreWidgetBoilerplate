@@ -61,7 +61,7 @@ dojo.declare('WidgetName.widget.WidgetName', [ mxui.widget._WidgetBase , dijit._
 		
 	},
 
-    // DOJO.WidgetBase -> PostCreate is fired after the properties of the widget are set.
+    // DOJO.WidgetBase -> Startup is fired after the properties of the widget are set.
     startup: function() {
         'use strict';
 
@@ -75,7 +75,7 @@ dojo.declare('WidgetName.widget.WidgetName', [ mxui.widget._WidgetBase , dijit._
 	/**
 	 * What to do when data is loaded?
 	 */
-    // DIJIT.update -> Update is fired before postCreate.
+        
 	update : function(obj, callback) {
 		'use strict';
 
