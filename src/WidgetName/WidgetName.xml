@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<widget id="WidgetName.widget.WidgetName" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
+  <name>WidgetName</name>
+  <description>The description of this widget.</description>
+
+  <icon></icon>
+
+  <properties>
+        <property key="backgroundColor" type="attribute">
+            <caption>Background Color</caption>
+            <category>Appearance</category>
+            <description>The background color of the widget.</description>
+            <attributeTypes>
+                <attributeType name="String"/>
+            </attributeTypes>
+        </property>
+        <property key="messageString" type="string" required="true" defaultValue="">
+            <caption>Message</caption>
+            <category>Appearance</category>
+            <description>The message visible within the widget.</description>
+        </property>
+        <property key="mfToExecute" type="microflow" required="false" defaultValue="">
+            <caption>Microflow</caption>
+            <category>Behavior</category>
+            <description>The microflow to execute on click.</description>
+            <returnType type="Boolean"></returnType>
+        </property>
+	</properties>
+</widget>
+
