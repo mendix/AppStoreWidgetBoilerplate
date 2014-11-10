@@ -158,7 +158,7 @@ dojo.declare('WidgetName.widget.WidgetName', [ mxui.widget._WidgetBase, dijit._T
 		'use strict';
 
 		// To be able to just alter one variable in the future we set an internal variable with the domNode that this widget uses.
-		this._wgtNode = this.domNode;
+		this.widgetNameNode = this.domNode;
 
 		// Load external library (EXAMPLE)
 		if (typeof jQuery !== 'undefined') {
