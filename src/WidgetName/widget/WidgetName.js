@@ -141,7 +141,7 @@ dojo.declare('WidgetName.widget.WidgetName', [ mxui.widget._WidgetBase, dijit._T
 		//TODO, what will happen if the widget is resumed (set visible).
 	},
 
-	unintialize: function () {
+	uninitialize: function () {
 		'use strict';
 		//TODO, clean up only events
         if (this._handle) {
