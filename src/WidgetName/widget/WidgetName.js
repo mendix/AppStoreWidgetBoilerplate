@@ -1,5 +1,5 @@
 /*jslint white: true nomen: true plusplus: true */
-/*global mx, mxui, mendix, dojo, require, console, define, module */
+/*global mx, mxui, mendix, dojo, require, console, define, module, logger */
 /**
 
 	WidgetName
@@ -60,7 +60,7 @@
             postCreate: function () {
 
                 // postCreate
-                console.log('WidgetName - postCreate');
+                logger.log('WidgetName - postCreate');
 
                 // Load CSS ... automaticly from ui directory
 
@@ -80,11 +80,13 @@
 
             // DOJO.WidgetBase -> Startup is fired after the properties of the widget are set.
             startup: function () {
+
+                // postCreate
+                logger.log('WidgetName - startup');
+
                 // Example setting message
                 this.domNode.appendChild(mxui.dom.create('span', 'internal propertie as constant: ' + this.messageString));
 
-                // postCreate
-                console.log('WidgetName - startup');
             },
 
             /**
@@ -92,8 +94,9 @@
              */
 
             update: function (obj, callback) {
+
                 // startup
-                console.log('WidgetName - update');
+                logger.log('WidgetName - update');
 
                 // Release handle on previous object, if any.
                 if (this._handle) {
@@ -119,8 +122,10 @@
                 }
 
                 if (obj === null) {
+
                     // Sorry no data no show!
-                    console.log('WidgetName  - update - We did not get any context object!');
+                    logger.log('WidgetName  - update - We did not get any context object!');
+
                 } else {
 
                     // Load data
@@ -173,7 +178,7 @@
                 //TODO, what will happen if the widget is resumed (set visible).
             },
 
-	uninitialize: function () {
+            uninitialize: function () {
                 //TODO, clean up only events
                 if (this._handle) {
                     mx.data.unsubscribe(this._handle);
@@ -201,13 +206,14 @@
                 // Assigning externally loaded library to internal variable inside function.
                 var $ = this.$;
 
-                console.log('WidgetName - createChildNodes events');
+                logger.log('WidgetName - createChildNodes events');
+
             },
 
             // Attach events to newly created nodes.
             _setupEvents: function () {
 
-                console.log('WidgetName - setup events');
+                logger.log('WidgetName - setup events');
 
                 dojo.on(this.domNode, 'click', dojo.hitch(this, function () {
 
@@ -221,7 +227,7 @@
                             //TODO what to do when all is ok!
                         }),
                         error: function (error) {
-                            console.log(error.description);
+                            logger.log(error.description);
                         }
                     }, this);
 
@@ -243,8 +249,7 @@
             },
 
             _showMessage: function () {
-
-                console.log(this.messageString);
+                logger.log(this.messageString);
             }
         });
     });
