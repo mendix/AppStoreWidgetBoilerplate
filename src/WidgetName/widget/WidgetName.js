@@ -1,8 +1,11 @@
+/*jslint white: true nomen: true plusplus: true */
+/*global mx, mxui, mendix, dojo, require, console, define, module */
 /**
-	Widget Name
+
+	WidgetName
 	========================
 
-	@file      : WigetName.js
+	@file      : WidgetName.js
 	@version   : 1.0
 	@author    : ...
 	@date      : 22-08-2014
@@ -10,221 +13,242 @@
 	@license   : Apache License, Version 2.0, January 2004
 
 	Documentation
-	=============
+    ========================
 	Describe your widget here.
 
 */
-dojo.provide('WidgetName.widget.WidgetName');
 
-dojo.declare('WidgetName.widget.WidgetName', [ mxui.widget._WidgetBase, dijit._Templated, dijit._Container, dijit._Contained, mxui.mixin._Contextable ], {
+(function() {
+    'use strict';
 
-	/**
-	 * Internal variables.
-	 * ======================
-	 */
-	_wgtNode				: null,
-	_contextGuid			: null,
-	_contextObj				: null,
-    _handle                 : null,
+    // test
+    require([
 
-	// Extra variables
-	_message				: 'Hello world!',
-	_extraContentDiv		: null,
+        'mxui/widget/_WidgetBase', 'dijit/_Widget', 'dijit/_TemplatedMixin',
+        'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/on', 'dojo/_base/lang', 'dojo/_base/declare', 'dojo/text',
+        'WidgetName/widget/lib/jquery'
 
-    // Template path
-    templatePath            : dojo.moduleUrl('WidgetName', 'widget/templates/WidgetName.html'),
+    ], function (_WidgetBase, _Widget, _Templated, domMx, dom, domQuery, domProp, domGeom, domClass, domStyle, on, lang, declare, text, _jQuery) {
 
-	/**
-	 * Mendix Widget methods.
-	 * ======================
-	 */
+        // Provide widget.
+        dojo.provide('WidgetName.widget.WidgetName');
 
-	// DOJO.WidgetBase -> PostCreate is fired after the properties of the widget are set.
-	postCreate: function () {
-		'use strict';
+        // Declare widget.
+        return declare('WidgetName.widget.WidgetName', [ _WidgetBase, _Widget, _Templated, _jQuery ], {
 
-        // postCreate
-        console.log('WidgetName - postCreate');
+            /**
+             * Internal variables.
+             * ======================
+             */
+            _wgtNode: null,
+            _contextGuid: null,
+            _contextObj: null,
+            _handle: null,
 
-		// Load CSS ... automaticly from ui directory
+            // Extra variables
+            _extraContentDiv: null,
 
-		// Setup widgets
-		this._setupWidget();
+            // Template path
+            templatePath: dojo.moduleUrl('WidgetName', 'widget/templates/WidgetName.html'),
 
-		// Create childnodes
-		this._createChildNodes();
+            /**
+             * Mendix Widget methods.
+             * ======================
+             */
 
-		// Setup events
-		this._setupEvents();
+            // DOJO.WidgetBase -> PostCreate is fired after the properties of the widget are set.
+            postCreate: function () {
 
-        // Show message
-        this._showMessage();
+                // postCreate
+                console.log('WidgetName - postCreate');
 
-	},
+                // Load CSS ... automaticly from ui directory
 
-    // DOJO.WidgetBase -> Startup is fired after the properties of the widget are set.
-    startup: function () {
-        'use strict';
+                // Setup widgets
+                this._setupWidget();
 
-        // Example setting message
-        this.widgetNameNode.appendChild(mxui.dom.create('span', 'internal propertie as constant: ' + this._message));
+                // Create childnodes
+                this._createChildNodes();
 
-        // postCreate
-        console.log('WidgetName - startup');
-    },
+                // Setup events
+                this._setupEvents();
 
-	/**
-	 * What to do when data is loaded?
-	 */
+                // Show message
+                this._showMessage();
 
-	update : function (obj, callback) {
-		'use strict';
+            },
 
-        // startup
-        console.log('WidgetName - update');
+            // DOJO.WidgetBase -> Startup is fired after the properties of the widget are set.
+            startup: function () {
+                // Example setting message
+                this.domNode.appendChild(mxui.dom.create('span', 'internal propertie as constant: ' + this.messageString));
 
-        // Release handle on previous object, if any.
-        if (this._handle) {
-            mx.data.unsubscribe(this._handle);
-        }
+                // postCreate
+                console.log('WidgetName - startup');
+            },
 
-		if (typeof obj === 'string') {
-			this._contextGuid = obj;
-            mx.data.get({
-				guids    : [this._contextGuid],
-				callback : dojo.hitch(this, function (objs) {
-					this._contextObj = objs;
-				})
-			});
-		} else {
-			this._contextObj = obj;
-		}
+            /**
+             * What to do when data is loaded?
+             */
 
-		if (obj === null) {
-			// Sorry no data no show!
-			console.log('WidgetName  - update - We did not get any context object!');
-		} else {
-			// Load data
-			this._loadData();
-            // Subscribe to object updates.
-            this._handle = mx.data.subscribe({
-                guid: this._contextObj.getGuid(),
-                callback: dojo.hitch(this, this._loadData)
-            });
-		}
+            update: function (obj, callback) {
+                // startup
+                console.log('WidgetName - update');
 
-		if (typeof callback !== 'undefined') {
-			callback();
-		}
-	},
+                // Release handle on previous object, if any.
+                if (this._handle) {
+                    mx.data.unsubscribe(this._handle);
+                }
 
-	/**
-	 * How the widget re-acts from actions invoked by the Mendix App.
-	 */
-	suspend : function () {
-		'use strict';
-		//TODO, what will happen if the widget is suspended (not visible).
-	},
+                if (typeof obj === 'string') {
+                    this._contextGuid = obj;
+                    mx.data.get({
+                        guids: [this._contextGuid],
+                        callback: dojo.hitch(this, function (objs) {
 
-	resume : function () {
-		'use strict';
-		//TODO, what will happen if the widget is resumed (set visible).
-	},
+                            // Set the object as background.
+                            this._contextObj = objs;
 
-	enable : function () {
-		'use strict';
-		//TODO, what will happen if the widget is suspended (not visible).
-	},
+                            // Load data again.
+                            this._loadData();
 
-	disable : function () {
-		'use strict';
-		//TODO, what will happen if the widget is resumed (set visible).
-	},
+                        })
+                    });
+                } else {
+                    this._contextObj = obj;
+                }
+
+                if (obj === null) {
+                    // Sorry no data no show!
+                    console.log('WidgetName  - update - We did not get any context object!');
+                } else {
+
+                    // Load data
+                    this._loadData();
+
+                    // Subscribe to object updates.
+                    this._handle = mx.data.subscribe({
+                        guid: this._contextObj.getGuid(),
+                        callback: dojo.hitch(this, function(obj){
+
+                            mx.data.get({
+                                guids: [obj],
+                                callback: dojo.hitch(this, function (objs) {
+
+                                    // Set the object as background.
+                                    this._contextObj = objs;
+
+                                    // Load data again.
+                                    this._loadData();
+
+                                })
+                            });
+
+                        })
+                    });
+                }
+
+                // Execute callback.
+                if(typeof callback !== 'undefined'){
+                    callback();
+                }
+            },
+
+            /**
+             * How the widget re-acts from actions invoked by the Mendix App.
+             */
+            suspend: function () {
+                //TODO, what will happen if the widget is suspended (not visible).
+            },
+
+            resume: function () {
+                //TODO, what will happen if the widget is resumed (set visible).
+            },
+
+            enable: function () {
+                //TODO, what will happen if the widget is suspended (not visible).
+            },
+
+            disable: function () {
+                //TODO, what will happen if the widget is resumed (set visible).
+            },
 
 	uninitialize: function () {
-		'use strict';
-		//TODO, clean up only events
-        if (this._handle) {
-            mx.data.unsubscribe(this._handle);
-        }
-	},
-
-
-	/**
-	 * Extra setup widget methods.
-	 * ======================
-	 */
-	_setupWidget: function () {
-		'use strict';
-
-		// To be able to just alter one variable in the future we set an internal variable with the domNode that this widget uses.
-		this._wgtNode = this.domNode;
-
-		// Load external library (EXAMPLE)
-		if (typeof jQuery !== 'undefined') {
-			dojo.require('WidgetName.widget.lib.jquery-1_11_1_min');
-
-			// To avoid jQuery incompatible behavior we set jquery to the older version with noConflict(); after we have attached the currently loaded jQuery as a variable inside the widget.
-			this.$ = jQuery;
-			jQuery.noConflict(); // Restore older version
-		}
-
-	},
-
-	 // Create child nodes.
-	_createChildNodes : function () {
-		'use strict';
-
-		// Assigning externally loaded library to internal variable inside function.
-		var $ = this.$;
-
-        console.log('WidgetName - createChildNodes events');
-	},
-
-	// Attach events to newly created nodes.
-    _setupEvents: function () {
-        'use strict';
-
-        console.log('WidgetName - setup events');
-
-        dojo.on(this.widgetNameNode, 'click', dojo.hitch(this, function () {
-
-            mx.data.action({
-                params: {
-                    applyto: 'selection',
-                    actionname: this.mfToExecute,
-                    guids: [this._contextObj.getGuid()]
-                },
-                callback: dojo.hitch(this, function (obj) {
-                    //TODO what to do when all is ok!
-                }),
-                error: function (error) {
-                    console.log(error.description);
+                //TODO, clean up only events
+                if (this._handle) {
+                    mx.data.unsubscribe(this._handle);
                 }
-            }, this);
-
-        }));
-
-	},
+            },
 
 
-	/**
-	 * Interaction widget methods.
-	 * ======================
-	 */
-    _loadData : function () {
-        'use strict';
+            /**
+             * Extra setup widget methods.
+             * ======================
+             */
+            _setupWidget: function () {
 
-        // TODO, get aditional data from mendix.
+                // Setup jQuery
+                this.$ = _jQuery().jQuery();
 
-        // Set background color after context object is loaded.
-        this.widgetNameNode.style.backgroundColor = this._contextObj.get(this.backgroundColor);
-    },
+                // To be able to just alter one variable in the future we set an internal variable with the domNode that this widget uses.
+                this._wgtNode = this.domNode;
 
-	_showMessage: function () {
-        'use strict';
+            },
 
-		console.log(this.messageString);
-	}
+            // Create child nodes.
+            _createChildNodes: function () {
 
-});
+                // Assigning externally loaded library to internal variable inside function.
+                var $ = this.$;
+
+                console.log('WidgetName - createChildNodes events');
+            },
+
+            // Attach events to newly created nodes.
+            _setupEvents: function () {
+
+                console.log('WidgetName - setup events');
+
+                dojo.on(this.domNode, 'click', dojo.hitch(this, function () {
+
+                    mx.data.action({
+                        params: {
+                            applyto: 'selection',
+                            actionname: this.mfToExecute,
+                            guids: [this._contextObj.getGuid()]
+                        },
+                        callback: dojo.hitch(this, function (obj) {
+                            //TODO what to do when all is ok!
+                        }),
+                        error: function (error) {
+                            console.log(error.description);
+                        }
+                    }, this);
+
+                }));
+
+            },
+
+
+            /**
+             * Interaction widget methods.
+             * ======================
+             */
+            _loadData: function () {
+
+                // TODO, get aditional data from mendix.
+
+                // Set background color after context object is loaded.
+                this.domNode.style.backgroundColor = this._contextObj.get(this.backgroundColor);
+            },
+
+            _showMessage: function () {
+
+                console.log(this.messageString);
+            }
+        });
+    });
+
+}());
+
+
