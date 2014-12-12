@@ -60,7 +60,7 @@
             postCreate: function () {
 
                 // postCreate
-                logger.log('WidgetName - postCreate');
+                console.log('WidgetName - postCreate');
 
                 // Load CSS ... automaticly from ui directory
 
@@ -82,7 +82,7 @@
             startup: function () {
 
                 // postCreate
-                logger.log('WidgetName - startup');
+                console.log('WidgetName - startup');
 
                 // Example setting message
                 this.domNode.appendChild(mxui.dom.create('span', 'internal propertie as constant: ' + this.messageString));
@@ -96,7 +96,7 @@
             update: function (obj, callback) {
 
                 // startup
-                logger.log('WidgetName - update');
+                console.log('WidgetName - update');
 
                 // Release handle on previous object, if any.
                 if (this._handle) {
@@ -124,7 +124,7 @@
                 if (obj === null) {
 
                     // Sorry no data no show!
-                    logger.log('WidgetName  - update - We did not get any context object!');
+                    console.log('WidgetName  - update - We did not get any context object!');
 
                 } else {
 
@@ -206,14 +206,14 @@
                 // Assigning externally loaded library to internal variable inside function.
                 var $ = this.$;
 
-                logger.log('WidgetName - createChildNodes events');
+                console.log('WidgetName - createChildNodes events');
 
             },
 
             // Attach events to newly created nodes.
             _setupEvents: function () {
 
-                logger.log('WidgetName - setup events');
+                console.log('WidgetName - setup events');
 
                 dojo.on(this.domNode, 'click', dojo.hitch(this, function () {
 
@@ -227,7 +227,7 @@
                             //TODO what to do when all is ok!
                         }),
                         error: function (error) {
-                            logger.log(error.description);
+                            console.log(error.description);
                         }
                     }, this);
 
@@ -249,7 +249,7 @@
             },
 
             _showMessage: function () {
-                logger.log(this.messageString);
+                console.log(this.messageString);
             }
         });
     });
