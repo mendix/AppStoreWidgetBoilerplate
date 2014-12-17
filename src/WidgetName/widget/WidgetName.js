@@ -1,5 +1,5 @@
 /*jslint white: true nomen: true plusplus: true */
-/*global mx, mxui, mendix, dojo, require, console, define, module, logger */
+/*global mx, mxui, mendix, require, console, define, module, logger */
 /**
 
 	WidgetName
@@ -21,17 +21,13 @@
 (function() {
     'use strict';
 
-    // test
     require([
 
-        'mxui/widget/_WidgetBase', 'dijit/_Widget', 'dijit/_TemplatedMixin',
-        'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/on', 'dojo/_base/lang', 'dojo/_base/declare', 'dojo/text',
+        'dojo/_base/declare', 'mxui/widget/_WidgetBase', 'dijit/_Widget', 'dijit/_TemplatedMixin',
+        'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/on', 'dojo/_base/lang', 'dojo/text',
         'WidgetName/widget/lib/jquery'
 
-    ], function (_WidgetBase, _Widget, _Templated, domMx, dom, domQuery, domProp, domGeom, domClass, domStyle, on, lang, declare, text, _jQuery) {
-
-        // Provide widget.
-        dojo.provide('WidgetName.widget.WidgetName');
+    ], function (declare, _WidgetBase, _Widget, _Templated, domMx, dom, domQuery, domProp, domGeom, domClass, domStyle, on, lang, text, _jQuery) {
 
         // Declare widget.
         return declare('WidgetName.widget.WidgetName', [ _WidgetBase, _Widget, _Templated, _jQuery ], {
@@ -49,7 +45,7 @@
             _extraContentDiv: null,
 
             // Template path
-            templatePath: dojo.moduleUrl('WidgetName', 'widget/templates/WidgetName.html'),
+            templatePath: require.toUrl('WidgetName', 'widget/templates/WidgetName.html'),
 
             /**
              * Mendix Widget methods.
@@ -107,7 +103,7 @@
                     this._contextGuid = obj;
                     mx.data.get({
                         guids: [this._contextGuid],
-                        callback: dojo.hitch(this, function (objs) {
+                        callback: lang.hitch(this, function (objs) {
 
                             // Set the object as background.
                             this._contextObj = objs;
@@ -134,11 +130,11 @@
                     // Subscribe to object updates.
                     this._handle = mx.data.subscribe({
                         guid: this._contextObj.getGuid(),
-                        callback: dojo.hitch(this, function(obj){
+                        callback: lang.hitch(this, function(obj){
 
                             mx.data.get({
                                 guids: [obj],
-                                callback: dojo.hitch(this, function (objs) {
+                                callback: lang.hitch(this, function (objs) {
 
                                     // Set the object as background.
                                     this._contextObj = objs;
@@ -215,7 +211,7 @@
 
                 console.log('WidgetName - setup events');
 
-                dojo.on(this.domNode, 'click', dojo.hitch(this, function () {
+                dojo.on(this.domNode, 'click', lang.hitch(this, function () {
 
                     mx.data.action({
                         params: {
@@ -223,7 +219,7 @@
                             actionname: this.mfToExecute,
                             guids: [this._contextObj.getGuid()]
                         },
-                        callback: dojo.hitch(this, function (obj) {
+                        callback: lang.hitch(this, function (obj) {
                             //TODO what to do when all is ok!
                         }),
                         error: function (error) {
