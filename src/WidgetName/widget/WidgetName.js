@@ -21,13 +21,14 @@
 (function() {
     'use strict';
 
+    // Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
     require([
 
         'dojo/_base/declare', 'mxui/widget/_WidgetBase', 'dijit/_Widget', 'dijit/_TemplatedMixin',
-        'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/on', 'dojo/_base/lang', 'dojo/text',
+        'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/dom-construct', 'dojo/window', 'dojo/on', 'dojo/_base/lang', 'dojo/text',
         'WidgetName/widget/lib/jquery'
 
-    ], function (declare, _WidgetBase, _Widget, _Templated, domMx, dom, domQuery, domProp, domGeom, domClass, domStyle, on, lang, text, _jQuery) {
+    ], function (declare, _WidgetBase, _Widget, _Templated, domMx, dom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, win, on, lang, text, _jQuery) {
 
         // Declare widget.
         return declare('WidgetName.widget.WidgetName', [ _WidgetBase, _Widget, _Templated, _jQuery ], {
@@ -45,7 +46,7 @@
             _extraContentDiv: null,
 
             // Template path
-            templatePath: require.toUrl('WidgetName', 'widget/templates/WidgetName.html'),
+            templatePath: require.toUrl('WidgetName/widget/templates/WidgetName.html'),
 
             /**
              * Mendix Widget methods.
@@ -211,7 +212,7 @@
 
                 console.log('WidgetName - setup events');
 
-                dojo.on(this.domNode, 'click', lang.hitch(this, function () {
+                on(this.domNode, 'click', lang.hitch(this, function () {
 
                     mx.data.action({
                         params: {
