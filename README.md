@@ -67,7 +67,7 @@ Here is a list of commonly used functions and their AMD counterpart:
 Old | New
 ---------- |---------- 
 dojo.byId             | dom.byId
-dojo.query            | domQuery Do not use domQuery.query! Just domQuery
+dojo.query            | domQuery
 dojo.hitch            | lang.hitch
 dojo.addClass         | domClass.add
 dojo.removeClass      | domClass.remove
@@ -78,3 +78,6 @@ dojo.place            | domConstruct.place
 dojo.on               | on
 dojo.window           | win
   
+Do not use domQuery.query! Just domQuery
+
+The referenced modules are in the module list of the boilerplate javascript
