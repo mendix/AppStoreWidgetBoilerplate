@@ -47,6 +47,7 @@ If your widget does not use an HTML template:
 - Remove dijit/_TemplatedMixin from the module list
 - Remove _Templated from the parameter list of the anonymous function below the module list
 - Remove _Templated from the parameter list of the declare call
+- Remove the templates folder
 
 If your widget does not need jQuery:
 
@@ -76,4 +77,4 @@ dojo.empty            | domConstruct.empty
 dojo.place            | domConstruct.place 
 dojo.on               | on
 dojo.window           | win
- 
+  
