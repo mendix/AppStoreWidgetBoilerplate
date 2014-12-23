@@ -66,8 +66,10 @@ Here is a list of commonly used functions and their AMD counterpart:
 
 Old | New
 ---------- |---------- 
+mxui.dom              | domMx
 dojo.byId             | dom.byId
 dojo.query            | domQuery
+dojo.forEach          | dojoArray.forEach
 dojo.hitch            | lang.hitch
 dojo.addClass         | domClass.add
 dojo.removeClass      | domClass.remove
