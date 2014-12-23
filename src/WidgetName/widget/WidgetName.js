@@ -1,5 +1,5 @@
 /*jslint white: true nomen: true plusplus: true */
-/*global mx, mxui, mendix, require, console, define, module, logger */
+/*global mx, mendix, require, console, define, module, logger */
 /**
 
 	WidgetName
@@ -25,10 +25,10 @@
     require([
 
         'dojo/_base/declare', 'mxui/widget/_WidgetBase', 'dijit/_Widget', 'dijit/_TemplatedMixin',
-        'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/dom-construct', 'dojo/window', 'dojo/on', 'dojo/_base/lang', 'dojo/text',
+        'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/window', 'dojo/on', 'dojo/_base/lang', 'dojo/text',
         'WidgetName/widget/lib/jquery'
 
-    ], function (declare, _WidgetBase, _Widget, _Templated, domMx, dom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, win, on, lang, text, _jQuery) {
+    ], function (declare, _WidgetBase, _Widget, _Templated, domMx, dom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, win, on, lang, text, _jQuery) {
 
         // Declare widget.
         return declare('WidgetName.widget.WidgetName', [ _WidgetBase, _Widget, _Templated, _jQuery ], {
