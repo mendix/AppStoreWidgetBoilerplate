@@ -1,5 +1,5 @@
-/*jslint white: true nomen: true plusplus: true */
-/*global mx, mendix, require, console, define, module, logger */
+/*jslint nomen: true*/
+/*global mx, mendix, require, console, define, module, logger, mxui */
 /**
 
 	WidgetName
@@ -18,7 +18,7 @@
 
 */
 
-(function() {
+(function () {
     'use strict';
 
     // Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
@@ -131,7 +131,7 @@
                     // Subscribe to object updates.
                     this._handle = mx.data.subscribe({
                         guid: this._contextObj.getGuid(),
-                        callback: lang.hitch(this, function(obj){
+                        callback: lang.hitch(this, function (obj) {
 
                             mx.data.get({
                                 guids: [obj],
@@ -151,7 +151,7 @@
                 }
 
                 // Execute callback.
-                if(typeof callback !== 'undefined'){
+                if (typeof callback !== 'undefined') {
                     callback();
                 }
             },
