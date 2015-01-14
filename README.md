@@ -1,6 +1,6 @@
 # App Store Widget Boilerplate
 
-This boilerplate gives you all you need to start a new custom widget for Mendix 5.
+This boilerplate gives you all you need to start a new custom widget for Mendix 5.6.0 and up.
 
 The boilerplate contains:
 
