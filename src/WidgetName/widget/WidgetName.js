@@ -1,5 +1,6 @@
-/*jslint nomen: true*/
+/*jslint white:true, nomen: true, plusplus: true */
 /*global mx, mendix, require, console, define, module, logger, mxui */
+/*mendix */
 /**
 
 	WidgetName
@@ -7,7 +8,7 @@
 
 	@file      : WidgetName.js
 	@version   : 1.0
-	@author    : ...
+	@author    : {{author}}
 	@date      : 22-08-2014
 	@copyright : Mendix Technology BV
 	@license   : Apache License, Version 2.0, January 2004
@@ -37,13 +38,9 @@
              * Internal variables.
              * ======================
              */
-            _wgtNode: null,
             _contextGuid: null,
             _contextObj: null,
             _handle: null,
-
-            // Extra variables
-            _extraContentDiv: null,
 
             // Template path
             templatePath: require.toUrl('WidgetName/widget/templates/WidgetName.html'),
@@ -107,7 +104,7 @@
                         callback: lang.hitch(this, function (objs) {
 
                             // Set the object as background.
-                            this._contextObj = objs;
+                            this._contextObj = objs[0];
 
                             // Load data again.
                             this._loadData();
@@ -125,6 +122,9 @@
 
                 } else {
 
+                    // Context object should be set before loaddata.
+                    this._contextObj = obj;
+                    
                     // Load data
                     this._loadData();
 
@@ -138,7 +138,7 @@
                                 callback: lang.hitch(this, function (objs) {
 
                                     // Set the object as background.
-                                    this._contextObj = objs;
+                                    this._contextObj = objs[0];
 
                                     // Load data again.
                                     this._loadData();
@@ -192,9 +192,6 @@
                 // Setup jQuery
                 this.$ = _jQuery().jQuery();
 
-                // To be able to just alter one variable in the future we set an internal variable with the domNode that this widget uses.
-                this._wgtNode = this.domNode;
-
             },
 
             // Create child nodes.
@@ -238,8 +235,6 @@
              * ======================
              */
             _loadData: function () {
-
-                // TODO, get aditional data from mendix.
 
                 // Set background color after context object is loaded.
                 this.domNode.style.backgroundColor = this._contextObj.get(this.backgroundColor);
