@@ -38,9 +38,7 @@
              * Internal variables.
              * ======================
              */
-            _contextGuid: null,
-            _contextObj: null,
-            _handle: null,
+            _data: {},
 
             // Template path
             templatePath: require.toUrl('WidgetName/widget/templates/WidgetName.html'),
@@ -89,22 +87,25 @@
 
             update: function (obj, callback) {
 
+                // Context object should be set before loaddata.
+                this._data[this.id]._contextObj = obj;
+                
                 // startup
                 console.log('WidgetName - update');
 
                 // Release handle on previous object, if any.
-                if (this._handle) {
-                    mx.data.unsubscribe(this._handle);
+                if (this._data[this.id]._handle) {
+                    mx.data.unsubscribe(this._data[this.id]._handle);
                 }
 
                 if (typeof obj === 'string') {
-                    this._contextGuid = obj;
+                    this._data[this.id]._contextGuid = obj;
                     mx.data.get({
-                        guids: [this._contextGuid],
+                        guids: [this._data[this.id]._contextGuid],
                         callback: lang.hitch(this, function (objs) {
 
                             // Set the object as background.
-                            this._contextObj = objs[0];
+                            this._data[this.id]._contextObj = objs[0];
 
                             // Load data again.
                             this._loadData();
@@ -112,7 +113,7 @@
                         })
                     });
                 } else {
-                    this._contextObj = obj;
+                    this._data[this.id]._contextObj = obj;
                 }
 
                 if (obj === null) {
@@ -121,16 +122,13 @@
                     console.log('WidgetName  - update - We did not get any context object!');
 
                 } else {
-
-                    // Context object should be set before loaddata.
-                    this._contextObj = obj;
                     
                     // Load data
                     this._loadData();
 
                     // Subscribe to object updates.
-                    this._handle = mx.data.subscribe({
-                        guid: this._contextObj.getGuid(),
+                    this._data[this.id]._handle = mx.data.subscribe({
+                        guid: this._data[this.id]._contextObj.getGuid(),
                         callback: lang.hitch(this, function (obj) {
 
                             mx.data.get({
@@ -138,7 +136,7 @@
                                 callback: lang.hitch(this, function (objs) {
 
                                     // Set the object as background.
-                                    this._contextObj = objs[0];
+                                    this._data[this.id]._contextObj = objs[0];
 
                                     // Load data again.
                                     this._loadData();
@@ -177,8 +175,8 @@
 
             uninitialize: function () {
                 //TODO, clean up only events
-                if (this._handle) {
-                    mx.data.unsubscribe(this._handle);
+                if (this._data[this.id]._handle) {
+                    mx.data.unsubscribe(this._data[this.id]._handle);
                 }
             },
 
@@ -191,6 +189,13 @@
 
                 // Setup jQuery
                 this.$ = _jQuery().jQuery();
+                
+                // To be able to use this widget with multiple instances of itself we need to add a data variable.
+                this._data[this.id] = {
+                    _contextGuid: null,
+                    _contextObj: null,
+                    _handle: null
+                };
 
             },
 
@@ -215,7 +220,7 @@
                         params: {
                             applyto: 'selection',
                             actionname: this.mfToExecute,
-                            guids: [this._contextObj.getGuid()]
+                            guids: [this._data[this.id]._contextObj.getGuid()]
                         },
                         callback: lang.hitch(this, function (obj) {
                             //TODO what to do when all is ok!
@@ -237,7 +242,7 @@
             _loadData: function () {
 
                 // Set background color after context object is loaded.
-                this.domNode.style.backgroundColor = this._contextObj.get(this.backgroundColor);
+                this.domNode.style.backgroundColor = this._data[this.id]._contextObj.get(this.backgroundColor);
             },
 
             _showMessage: function () {
