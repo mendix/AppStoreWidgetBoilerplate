@@ -7,7 +7,7 @@
 	========================
 
 	@file      : WidgetName.js
-	@version   : 1.0
+	@version   : {{version}}
 	@author    : {{author}}
 	@date      : {{date}}
 	@copyright : Mendix Technology BV
