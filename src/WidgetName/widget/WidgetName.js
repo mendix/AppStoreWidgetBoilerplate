@@ -9,7 +9,7 @@
 	@file      : WidgetName.js
 	@version   : 1.0
 	@author    : {{author}}
-	@date      : 22-08-2014
+	@date      : {{date}}
 	@copyright : Mendix Technology BV
 	@license   : Apache License, Version 2.0, January 2004
 
