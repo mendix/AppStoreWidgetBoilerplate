@@ -1,256 +1,133 @@
 /*jslint white:true, nomen: true, plusplus: true */
-/*global mx, mendix, require, console, define, module, logger, mxui */
-/*mendix */
-/**
-
-	WidgetName
-	========================
-
-	@file      : WidgetName.js
-	@version   : {{version}}
-	@author    : {{author}}
-	@date      : {{date}}
-	@copyright : Mendix Technology BV
-	@license   : Apache License, Version 2.0, January 2004
-
-	Documentation
+/*global mx, define, require, browser, devel */
+/*
+    WidgetName
     ========================
-	Describe your widget here.
 
+    @file      : WidgetName.js
+    @version   : {{version}}
+    @author    : {{author}}
+    @date      : {{date}}
+    @copyright : {{copyright}}
+    @license   : {{license}}
+
+    Documentation
+    ========================
+    Describe your widget here.
 */
 
-(function () {
-    'use strict';
+// Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
+require({
+    packages: [{ name: 'jquery', location: '../../widgets/WidgetName/lib', main: 'jquery-1.11.2.min' }]
+}, [
+    'dojo/_base/declare', 'mxui/widget/_WidgetBase', 'dijit/_TemplatedMixin',
+    'mxui/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/_base/lang', 'dojo/text',
+    'jquery', 'dojo/text!WidgetName/widget/template/WidgetName.html'
+], function (declare, _WidgetBase, _TemplatedMixin, dom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, lang, text, $, widgetTemplate) {
 
-    // Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
-    require([
+    // Declare widget's prototype.
+    return declare('WidgetName.widget.WidgetName', [ _WidgetBase, _TemplatedMixin ], {
+        // _TemplatedMixin will create our dom node using this HTML template.
+        templateString: widgetTemplate,
 
-        'dojo/_base/declare', 'mxui/widget/_WidgetBase', 'dijit/_Widget', 'dijit/_TemplatedMixin',
-        'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/window', 'dojo/on', 'dojo/_base/lang', 'dojo/text',
-        'WidgetName/widget/lib/jquery'
+        // Parameters configured in the Modeler.
+        mfToExecute: "",
+        messageString: "",
+        backgroundColor: "",
 
-    ], function (declare, _WidgetBase, _Widget, _Templated, domMx, dom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, win, on, lang, text, _jQuery) {
+        // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
+        _handle: null,
+        _contextObj: null,
+        _objProperty: null,
 
-        // Declare widget.
-        return declare('WidgetName.widget.WidgetName', [ _WidgetBase, _Widget, _Templated, _jQuery ], {
+        // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
+        constructor: function () {
+            this._objProperty = {};
+        },
 
-            /**
-             * Internal variables.
-             * ======================
-             */
-            _data: {},
+        // dijit._WidgetBase.buildRendering is called when constructing the widget. Implement to create or manipulate widget markup.
+        buildRendering: function () {
+            console.log(this.id + '.buildRendering');
 
-            // Template path
-            templatePath: require.toUrl('WidgetName/widget/templates/WidgetName.html'),
+            // Call dijit._TemplatedMixin.buildRendering to get our dom node.
+            this.inherited(arguments);
 
-            /**
-             * Mendix Widget methods.
-             * ======================
-             */
+            this.domNode.appendChild(dom.create('span', { 'class': 'widgetname-message' }, 'internal property as constant: ' + this.messageString));
 
-            // DOJO.WidgetBase -> PostCreate is fired after the properties of the widget are set.
-            postCreate: function () {
+            this._setupEvents();
+        },
 
-                // postCreate
-                console.log('WidgetName - postCreate');
+        // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
+        postCreate: function () {
+            console.log(this.id + '.postCreate');
+        },
 
-                // Load CSS ... automaticly from ui directory
+        // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
+        update: function (obj, callback) {
+            console.log(this.id + '.update');
 
-                // Setup widgets
-                this._setupWidget();
+            this._contextObj = obj;
+            this._resetSubscriptions();
+            this._updateRendering();
 
-                // Create childnodes
-                this._createChildNodes();
+            callback();
+        },
 
-                // Setup events
-                this._setupEvents();
+        // mxui.widget._WidgetBase.enable is called when the widget should enable editing. Implement to enable editing if widget is input widget.
+        enable: function () {
 
-                // Show message
-                this._showMessage();
+        },
 
-            },
+        // mxui.widget._WidgetBase.enable is called when the widget should disable editing. Implement to disable editing if widget is input widget.
+        disable: function () {
 
-            // DOJO.WidgetBase -> Startup is fired after the properties of the widget are set.
-            startup: function () {
+        },
 
-                // postCreate
-                console.log('WidgetName - startup');
+        // mxui.widget._WidgetBase.resize is called when the page's layout is recalculated. Implement to do sizing calculations. Prefer using CSS instead.
+        resize: function (box) {
 
-                // Example setting message
-                this.domNode.appendChild(mxui.dom.create('span', 'internal propertie as constant: ' + this.messageString));
+        },
 
-            },
+        // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. Implement to do special tear-down work.
+        uninitialize: function () {
+            // Clean up listeners, helper objects, etc. There is no need to remove listeners added with this.connect / this.subscribe / this.own.
+        },
 
-            /**
-             * What to do when data is loaded?
-             */
+        _setupEvents: function () {
+            this.connect(this.domNode, 'click', function () {
+                mx.data.action({
+                    params: {
+                        applyto: 'selection',
+                        actionname: this.mfToExecute,
+                        guids: [this._contextObj.getGuid()]
+                    },
+                    callback: function (obj) {
+                        //TODO what to do when all is ok!
+                    },
+                    error: function (error) {
+                        console.log(this.id + ': An error occurred while executing microflow: ' + error.description);
+                    }
+                }, this);
+            });
+        },
 
-            update: function (obj, callback) {
+        _updateRendering: function () {
+            this.domNode.style.backgroundColor = this._contextObj ? this._contextObj.get(this.backgroundColor) : "";
+        },
 
-                // Context object should be set before loaddata.
-                this._data[this.id]._contextObj = obj;
-                
-                // startup
-                console.log('WidgetName - update');
-
-                // Release handle on previous object, if any.
-                if (this._data[this.id]._handle) {
-                    mx.data.unsubscribe(this._data[this.id]._handle);
-                }
-
-                if (typeof obj === 'string') {
-                    this._data[this.id]._contextGuid = obj;
-                    mx.data.get({
-                        guids: [this._data[this.id]._contextGuid],
-                        callback: lang.hitch(this, function (objs) {
-
-                            // Set the object as background.
-                            this._data[this.id]._contextObj = objs[0];
-
-                            // Load data again.
-                            this._loadData();
-
-                        })
-                    });
-                } else {
-                    this._data[this.id]._contextObj = obj;
-                }
-
-                if (obj === null) {
-
-                    // Sorry no data no show!
-                    console.log('WidgetName  - update - We did not get any context object!');
-
-                } else {
-                    
-                    // Load data
-                    this._loadData();
-
-                    // Subscribe to object updates.
-                    this._data[this.id]._handle = mx.data.subscribe({
-                        guid: this._data[this.id]._contextObj.getGuid(),
-                        callback: lang.hitch(this, function (obj) {
-
-                            mx.data.get({
-                                guids: [obj],
-                                callback: lang.hitch(this, function (objs) {
-
-                                    // Set the object as background.
-                                    this._data[this.id]._contextObj = objs[0];
-
-                                    // Load data again.
-                                    this._loadData();
-
-                                })
-                            });
-
-                        })
-                    });
-                }
-
-                // Execute callback.
-                if (typeof callback !== 'undefined') {
-                    callback();
-                }
-            },
-
-            /**
-             * How the widget re-acts from actions invoked by the Mendix App.
-             */
-            suspend: function () {
-                //TODO, what will happen if the widget is suspended (not visible).
-            },
-
-            resume: function () {
-                //TODO, what will happen if the widget is resumed (set visible).
-            },
-
-            enable: function () {
-                //TODO, what will happen if the widget is suspended (not visible).
-            },
-
-            disable: function () {
-                //TODO, what will happen if the widget is resumed (set visible).
-            },
-
-            uninitialize: function () {
-                //TODO, clean up only events
-                if (this._data[this.id]._handle) {
-                    mx.data.unsubscribe(this._data[this.id]._handle);
-                }
-            },
-
-
-            /**
-             * Extra setup widget methods.
-             * ======================
-             */
-            _setupWidget: function () {
-
-                // Setup jQuery
-                this.$ = _jQuery().jQuery();
-                
-                // To be able to use this widget with multiple instances of itself we need to add a data variable.
-                this._data[this.id] = {
-                    _contextGuid: null,
-                    _contextObj: null,
-                    _handle: null
-                };
-
-            },
-
-            // Create child nodes.
-            _createChildNodes: function () {
-
-                // Assigning externally loaded library to internal variable inside function.
-                var $ = this.$;
-
-                console.log('WidgetName - createChildNodes events');
-
-            },
-
-            // Attach events to newly created nodes.
-            _setupEvents: function () {
-
-                console.log('WidgetName - setup events');
-
-                on(this.domNode, 'click', lang.hitch(this, function () {
-
-                    mx.data.action({
-                        params: {
-                            applyto: 'selection',
-                            actionname: this.mfToExecute,
-                            guids: [this._data[this.id]._contextObj.getGuid()]
-                        },
-                        callback: lang.hitch(this, function (obj) {
-                            //TODO what to do when all is ok!
-                        }),
-                        error: function (error) {
-                            console.log(error.description);
-                        }
-                    }, this);
-
-                }));
-
-            },
-
-
-            /**
-             * Interaction widget methods.
-             * ======================
-             */
-            _loadData: function () {
-
-                // Set background color after context object is loaded.
-                this.domNode.style.backgroundColor = this._data[this.id]._contextObj.get(this.backgroundColor);
-            },
-
-            _showMessage: function () {
-                console.log(this.messageString);
+        _resetSubscriptions: function () {
+            // Release handle on previous object, if any.
+            if (this._handle) {
+                this.unsubscribe(this._handle);
+                this._handle = null;
             }
-        });
+
+            if (this._contextObj) {
+                this._handle = this.subscribe({
+                    guid: this._contextObj.getGuid(),
+                    callback: this._updateRendering
+                });
+            }
+        }
     });
-
-}());
-
-
+});
