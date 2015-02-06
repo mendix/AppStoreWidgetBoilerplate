@@ -1,5 +1,6 @@
 /*jslint white:true, nomen: true, plusplus: true */
-/*global mx, define, require, browser, devel */
+/*global mx, define, require, browser, devel, console */
+/*mendix */
 /*
     WidgetName
     ========================
@@ -21,10 +22,11 @@ require({
     packages: [{ name: 'jquery', location: '../../widgets/WidgetName/lib', main: 'jquery-1.11.2.min' }]
 }, [
     'dojo/_base/declare', 'mxui/widget/_WidgetBase', 'dijit/_TemplatedMixin',
-    'mxui/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/_base/lang', 'dojo/text',
+    'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/_base/lang', 'dojo/text',
     'jquery', 'dojo/text!WidgetName/widget/template/WidgetName.html'
-], function (declare, _WidgetBase, _TemplatedMixin, dom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, lang, text, $, widgetTemplate) {
-
+], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, lang, text, $, widgetTemplate) {
+    'use strict';
+    
     // Declare widget's prototype.
     return declare('WidgetName.widget.WidgetName', [ _WidgetBase, _TemplatedMixin ], {
         // _TemplatedMixin will create our dom node using this HTML template.
@@ -45,21 +47,13 @@ require({
             this._objProperty = {};
         },
 
-        // dijit._WidgetBase.buildRendering is called when constructing the widget. Implement to create or manipulate widget markup.
-        buildRendering: function () {
-            console.log(this.id + '.buildRendering');
-
-            // Call dijit._TemplatedMixin.buildRendering to get our dom node.
-            this.inherited(arguments);
-
-            this.domNode.appendChild(dom.create('span', { 'class': 'widgetname-message' }, 'internal property as constant: ' + this.messageString));
-
-            this._setupEvents();
-        },
-
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function () {
             console.log(this.id + '.postCreate');
+            
+            this.domNode.appendChild(dom.create('span', { 'class': 'widgetname-message' }, 'internal property as constant: ' + this.messageString));
+
+            this._setupEvents();
         },
 
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
