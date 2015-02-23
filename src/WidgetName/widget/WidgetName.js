@@ -51,7 +51,7 @@ require({
         postCreate: function () {
             console.log(this.id + '.postCreate');
             
-            this.domNode.appendChild(dom.create('span', { 'class': 'widgetname-message' }, 'internal property as constant: ' + this.messageString));
+            this.domNode.appendChild(dom.create('span', { 'class': 'widgetname-message' }, this.messageString));
 
             this._setupEvents();
         },
