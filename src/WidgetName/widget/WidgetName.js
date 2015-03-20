@@ -159,6 +159,7 @@ require({
             if (this._contextObj) {
                 this._handle = this.subscribe({
                     guid: this._contextObj.getGuid(),
+                    attr: this.backgroundColor,
                     callback: this._updateRendering
                 });
             }
