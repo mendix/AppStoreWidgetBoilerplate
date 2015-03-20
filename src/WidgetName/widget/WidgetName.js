@@ -41,10 +41,29 @@ require({
         _handle: null,
         _contextObj: null,
         _objProperty: null,
+        
+        // Mobile event emulator
+        _clickEvent: null,
+        _mouseDownEvent: null,
+        _mouseUpEvent: null,
+        _mouseOutEvent: null,
 
         // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
         constructor: function () {
             this._objProperty = {};
+            
+            // Mobile event emulator
+            if (document.ontouchstart !== null) {
+                this._clickEvent = 'touchstart';
+                this._mouseDownEvent = 'touchstart';
+                this._mouseUpEvent = 'touchend';
+                this._mouseOutEvent = 'touchend';
+            } else {
+                this._clickEvent = 'click';
+                this._mouseDownEvent = 'mousedown';
+                this._mouseUpEvent = 'mouseup';
+                this._mouseOutEvent = 'mouseout';
+            }
         },
 
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
@@ -86,9 +105,29 @@ require({
         uninitialize: function () {
             // Clean up listeners, helper objects, etc. There is no need to remove listeners added with this.connect / this.subscribe / this.own.
         },
-
+        
+        // We want to stop events on a mobile device
+        _stopBubblingEventOnMobile: function(e) {
+            if (document.ontouchstart !== null) {
+                if(e.stopPropagation){
+                    e.stopPropagation();
+                } else {
+                    if (e.preventDefault){
+                        e.preventDefault();
+                        e.cancelBubble = true;
+                    } else {
+                        e.cancelBubble = true;
+                    }
+                }
+            }
+        },
+        
         _setupEvents: function () {
-            this.connect(this.domNode, 'click', function () {
+            this.connect(this.domNode, this._clickEvent, function (e) {
+                
+                // Stop the event from bubbling in mobile devices.
+                this._stopBubblingEventOnMobile(e);
+                
                 mx.data.action({
                     params: {
                         applyto: 'selection',
@@ -102,6 +141,7 @@ require({
                         console.log(this.id + ': An error occurred while executing microflow: ' + error.description);
                     }
                 }, this);
+                
             });
         },
 
