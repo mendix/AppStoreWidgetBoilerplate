@@ -38,9 +38,10 @@ require({
         backgroundColor: "",
 
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
-        _handle: null,
+        _handles: null,
         _contextObj: null,
         _objProperty: null,
+		_alertdiv : null,
         
         // Mobile event emulator
         _clickEvent: null,
@@ -53,7 +54,7 @@ require({
             this._objProperty = {};
             
             // Mobile event emulator
-            if (document.ontouchstart !== null) {
+            if (typeof document.ontouchstart !== 'undefined') {
                 this._clickEvent = 'touchstart';
                 this._mouseDownEvent = 'touchstart';
                 this._mouseUpEvent = 'touchend';
@@ -108,7 +109,7 @@ require({
         
         // We want to stop events on a mobile device
         _stopBubblingEventOnMobile: function(e) {
-            if (document.ontouchstart !== null) {
+            if (typeof document.ontouchstart !== 'undefined') {
                 if(e.stopPropagation){
                     e.stopPropagation();
                 } else {
@@ -147,21 +148,69 @@ require({
 
         _updateRendering: function () {
             this.domNode.style.backgroundColor = this._contextObj ? this._contextObj.get(this.backgroundColor) : "";
+			this._clearValidations();
         },
 
+		_handleValidation: function(validations) {
+			this._clearValidations();
+			
+			var val = validations[0],
+				msg = val.getReasonByAttribute(this.backgroundColor);    
+
+			if(this.readOnly){
+				val.removeAttribute(this.entity);
+			} else {                                
+				if (msg) {
+					this._addValidation(msg);
+					val.removeAttribute(this.entity);
+				}
+			}
+		},
+		
+		_clearValidations: function() {
+			domConstruct.destroy(this._alertdiv);
+		},
+		
+		_addValidation : function(msg) {
+			this._alertdiv = domConstruct.create("div", { 
+				class : 'alert alert-danger',
+				innerHTML: msg });
+			
+			this.domNode.appendChild(this._alertdiv);
+			
+		},
+		
         _resetSubscriptions: function () {
-            // Release handle on previous object, if any.
-            if (this._handle) {
-                this.unsubscribe(this._handle);
-                this._handle = null;
-            }
+			var objHandle = null, 
+				attrHandle = null, 
+				validationHandle = null;
+			
+			// Release handles on previous object, if any.
+			if(this._handles){
+				this._handles.forEach(function (handle, i) {
+					mx.data.unsubscribe(handle);
+				});
+			}
 
             if (this._contextObj) {
-                this._handle = this.subscribe({
+				objHandle = this.subscribe({
+					guid: this._contextObj.getGuid(),
+					callback: lang.hitch(this,this._updateRendering)
+				});
+				
+                attrHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),
                     attr: this.backgroundColor,
-                    callback: this._updateRendering
+                    callback: lang.hitch(this,this._updateRendering)
                 });
+				
+				validationHandle = mx.data.subscribe({
+					guid     : this._contextObj.getGuid(),
+					val      : true,
+					callback : lang.hitch(this,this._handleValidation)
+				});
+			
+				this.handles = [objHandle, attrHandle, validationHandle];
             }
         }
     });
