@@ -71,8 +71,7 @@ require({
         postCreate: function () {
             console.log(this.id + '.postCreate');
             
-            this.domNode.appendChild(dom.create('span', { 'class': 'widgetname-message' }, this.messageString));
-
+			this._drawWidget();
             this._setupEvents();
         },
 
@@ -83,7 +82,7 @@ require({
             this._contextObj = obj;
             this._resetSubscriptions();
             this._updateRendering();
-
+			
             callback();
         },
 
@@ -107,6 +106,17 @@ require({
             // Clean up listeners, helper objects, etc. There is no need to remove listeners added with this.connect / this.subscribe / this.own.
         },
         
+		_drawWidget : function () {
+			// padding correction
+			domStyle.set(this.colorSelectNode.parentNode, "padding", '2px 6px');
+			domStyle.set(this.infoTextNode,{ padding : "0.8em 1em",
+											 marginTop: "10px" });
+			
+			this.colorSelectNode.disabled = this.readOnly;
+			this.colorInputNode.disabled = this.readOnly;
+			
+		},
+		
         // We want to stop events on a mobile device
         _stopBubblingEventOnMobile: function(e) {
             if (typeof document.ontouchstart !== 'undefined') {
@@ -124,7 +134,12 @@ require({
         },
         
         _setupEvents: function () {
-            this.connect(this.domNode, this._clickEvent, function (e) {
+            
+			this.connect(this.colorSelectNode, 'change', function (e) {
+				this._contextObj.set(this.backgroundColor, this.colorSelectNode.value);
+			});
+			
+			this.connect(this.infoTextNode, this._clickEvent, function (e) {
                 
                 // Stop the event from bubbling in mobile devices.
                 this._stopBubblingEventOnMobile(e);
@@ -147,7 +162,22 @@ require({
         },
 
         _updateRendering: function () {
-            this.domNode.style.backgroundColor = this._contextObj ? this._contextObj.get(this.backgroundColor) : "";
+
+			if(this._contextObj !== null) {
+				domStyle.set(this.domNode, "display", "initial");
+				
+				var colorValue = this._contextObj.get(this.backgroundColor);
+
+				this.colorInputNode.value = colorValue;
+				this.colorSelectNode.value = colorValue;
+
+				this.infoTextNode.innerHTML = this.messageString;			
+				this.infoTextNode.style.background = colorValue;
+			}
+			else {
+				domStyle.set(this.domNode, "display", "none");
+			}
+			
 			this._clearValidations();
         },
 
@@ -158,11 +188,11 @@ require({
 				msg = val.getReasonByAttribute(this.backgroundColor);    
 
 			if(this.readOnly){
-				val.removeAttribute(this.entity);
+				val.removeAttribute(this.backgroundColor);
 			} else {                                
 				if (msg) {
 					this._addValidation(msg);
-					val.removeAttribute(this.entity);
+					val.removeAttribute(this.backgroundColor);
 				}
 			}
 		},
@@ -195,13 +225,17 @@ require({
             if (this._contextObj) {
 				objHandle = this.subscribe({
 					guid: this._contextObj.getGuid(),
-					callback: lang.hitch(this,this._updateRendering)
+					callback: lang.hitch(this,function(guid) {
+						this._updateRendering();
+					})
 				});
 				
                 attrHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),
                     attr: this.backgroundColor,
-                    callback: lang.hitch(this,this._updateRendering)
+					callback: lang.hitch(this,function(guid,attr,attrValue) {
+						this._updateRendering();
+					})
                 });
 				
 				validationHandle = mx.data.subscribe({
@@ -210,7 +244,7 @@ require({
 					callback : lang.hitch(this,this._handleValidation)
 				});
 			
-				this.handles = [objHandle, attrHandle, validationHandle];
+				this._handles = [objHandle, attrHandle, validationHandle];
             }
         }
     });
