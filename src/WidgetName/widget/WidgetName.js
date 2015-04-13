@@ -164,7 +164,7 @@ require({
         _updateRendering: function () {
 
 			if(this._contextObj !== null) {
-				domStyle.set(this.domNode, "display", "initial");
+				domStyle.set(this.domNode, "visibility", "visible");
 				
 				var colorValue = this._contextObj.get(this.backgroundColor);
 
@@ -175,7 +175,7 @@ require({
 				this.infoTextNode.style.background = colorValue;
 			}
 			else {
-				domStyle.set(this.domNode, "display", "none");
+				domStyle.set(this.domNode, "visibility", "hidden");
 			}
 			
 			this._clearValidations();
