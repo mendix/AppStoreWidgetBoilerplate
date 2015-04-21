@@ -1,5 +1,5 @@
 /*jslint white:true, nomen: true, plusplus: true */
-/*global mx, define, require, browser, devel, console, document */
+/*global mx, define, require, browser, devel, console, document, jQuery */
 /*mendix */
 /*
     WidgetName
@@ -18,19 +18,15 @@
 */
 
 // Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
-require({
-    packages: [{
-        name: 'jquery',
-        location: '../../widgets/WidgetName/lib',
-        main: 'jquery-1.11.2.min'
-    }]
-}, [
+define([
     'dojo/_base/declare', 'mxui/widget/_WidgetBase', 'dijit/_TemplatedMixin',
     'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/_base/lang', 'dojo/text', 'dojo/html', 'dojo/_base/event',
-    'jquery', 'dojo/text!WidgetName/widget/template/WidgetName.html'
-], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, lang, text, html, event, $, widgetTemplate) {
+    'WidgetName/lib/jquery-1.11.2.min', 'dojo/text!WidgetName/widget/template/WidgetName.html'
+], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, lang, text, html, event, _jQuery, widgetTemplate) {
     'use strict';
 
+    var $ = jQuery.noConflict(true);
+    
     // Declare widget's prototype.
     return declare('WidgetName.widget.WidgetName', [_WidgetBase, _TemplatedMixin], {
 
@@ -199,7 +195,7 @@ require({
             // Release handles on previous object, if any.
             if (this._handles) {
                 this._handles.forEach(function (handle, i) {
-                    this.unsubscribe(handle);
+                    mx.data.unsubscribe(handle);
                 });
                 this._handles = [];
             }
@@ -232,4 +228,7 @@ require({
             }
         }
     });
+});
+require(['WidgetName/widget/WidgetName'], function () {
+    'use strict';
 });
