@@ -71,7 +71,7 @@ Old | New
 ---------- |---------- 
 mxui.dom              | domMx
 dojo.byId             | dom.byId
-dojo.query            | domQuery
+dojo.query            | document.querySelector
 dojo.forEach          | dojoArray.forEach
 dojo.hitch            | lang.hitch
 dojo.addClass         | domClass.add
