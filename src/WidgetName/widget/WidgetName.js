@@ -199,7 +199,7 @@ define([
 
             // Release handles on previous object, if any.
             if (this._handles) {
-                this._handles.forEach(function(handle, i) {
+                this._handles.forEach(function(handle) {
                     mx.data.unsubscribe(handle);
                 });
                 this._handles = [];
