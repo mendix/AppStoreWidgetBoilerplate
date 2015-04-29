@@ -1,0 +1,15 @@
+{
+    // Enforcing
+    "curly"    : false,
+    "forin"    : false,
+    "latedef"  : "nofunc",
+    "newcap"   : true,
+    "quotmark" : "double",
+    "eqeqeq"   : true,
+
+    // Relaxing
+    "laxbreak" : true,
+
+    // Environments
+    "devel"    : false
+}
