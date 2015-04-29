@@ -43,6 +43,11 @@ define([
         // _TemplatedMixin will create our dom node using this HTML template.
         templateString: widgetTemplate,
 
+        // DOM elements
+        colorSelectNode: null,
+        colorInputNode: null,
+        infoTextNode: null,
+
         // Parameters configured in the Modeler.
         mfToExecute: "",
         messageString: "",
