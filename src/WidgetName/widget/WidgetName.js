@@ -33,7 +33,7 @@ define([
     "dojo/_base/event",
     "WidgetName/lib/jquery-1.11.2.min",
     "dojo/text!WidgetName/widget/template/WidgetName.html"
-], function(declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, lang, text, html, event, _jQuery, widgetTemplate) {
+], function(declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, dojoLang, dojoText, dojoHtml, dojoEvent, _jQuery, widgetTemplate) {
     "use strict";
 
     var $ = _jQuery.noConflict(true);
@@ -93,7 +93,7 @@ define([
         // We want to stop events on a mobile device
         _stopBubblingEventOnMobile: function(e) {
             if (typeof document.ontouchstart !== "undefined") {
-                event.stop(e);
+                dojoEvent.stop(e);
             }
         },
 
@@ -119,7 +119,7 @@ define([
                         callback: function(obj) {
                             //TODO what to do when all is ok!
                         },
-                        error: lang.hitch(this, function(error) {
+                        error: dojoLang.hitch(this, function(error) {
                             console.log(this.id + ": An error occurred while executing microflow: " + error.description);
                         })
                     }, this);
@@ -133,17 +133,17 @@ define([
             this.colorInputNode.disabled = this.readOnly;
 
             if (this._contextObj !== null) {
-                domStyle.set(this.domNode, "display", "block");
+                dojoStyle.set(this.domNode, "display", "block");
 
                 var colorValue = this._contextObj.get(this.backgroundColor);
 
                 this.colorInputNode.value = colorValue;
                 this.colorSelectNode.value = colorValue;
 
-                html.set(this.infoTextNode, this.messageString);
-                domStyle.set(this.infoTextNode, "background-color", colorValue);
+                dojoHtml.set(this.infoTextNode, this.messageString);
+                dojoStyle.set(this.infoTextNode, "background-color", colorValue);
             } else {
-                domStyle.set(this.domNode, "display", "none");
+                dojoStyle.set(this.domNode, "display", "none");
             }
 
             // Important to clear all validations!
@@ -167,21 +167,21 @@ define([
 
         // Clear validations.
         _clearValidations: function() {
-            domConstruct.destroy(this._alertdiv);
+            dojoConstruct.destroy(this._alertdiv);
             this._alertdiv = null;
         },
 
         // Show an error message.
         _showError: function(message) {
             if (this._alertDiv !== null) {
-                html.set(this._alertDiv, message);
+                dojoHtml.set(this._alertDiv, message);
                 return true;
             }
-            this._alertDiv = domConstruct.create("div", {
+            this._alertDiv = dojoConstruct.create("div", {
                 "class": "alert alert-danger",
                 "innerHTML": message
             });
-            domConstruct.place(this.domNode, this._alertdiv);
+            dojoConstruct.place(this.domNode, this._alertdiv);
         },
 
         // Add a validation.
@@ -203,7 +203,7 @@ define([
             if (this._contextObj) {
                 var objectHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),
-                    callback: lang.hitch(this, function(guid) {
+                    callback: dojoLang.hitch(this, function(guid) {
                         this._updateRendering();
                     })
                 });
@@ -211,7 +211,7 @@ define([
                 var attrHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),
                     attr: this.backgroundColor,
-                    callback: lang.hitch(this, function(guid, attr, attrValue) {
+                    callback: dojoLang.hitch(this, function(guid, attr, attrValue) {
                         this._updateRendering();
                     })
                 });
@@ -219,7 +219,7 @@ define([
                 var validationHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),
                     val: true,
-                    callback: lang.hitch(this, this._handleValidation)
+                    callback: dojoLang.hitch(this, this._handleValidation)
                 });
 
                 this._handles = [ objectHandle, attrHandle, validationHandle ];
