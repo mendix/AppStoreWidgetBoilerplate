@@ -6,10 +6,18 @@
     "newcap"   : true,
     "quotmark" : "double",
     "eqeqeq"   : true,
+    "undef"    : true,
+    "globals"  : {
+        "mendix" : false,
+        "mx"     : false
+    },
 
     // Relaxing
     "laxbreak" : true,
 
     // Environments
-    "devel"    : false
+    "browser"  : true,
+    "devel"    : true,
+    "dojo"     : true,
+    "jquery"   : true
 }

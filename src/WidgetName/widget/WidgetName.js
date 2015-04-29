@@ -1,6 +1,3 @@
-/*jslint white:true, nomen: true, plusplus: true */
-/*global mx, define, require, browser, devel, console, document, jQuery */
-/*mendix */
 /*
     WidgetName
     ========================
