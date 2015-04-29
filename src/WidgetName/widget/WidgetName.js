@@ -135,13 +135,13 @@ define([
             if (this._contextObj !== null) {
                 domStyle.set(this.domNode, "display", "block");
 
-                var _colorValue = this._contextObj.get(this.backgroundColor);
+                var colorValue = this._contextObj.get(this.backgroundColor);
 
-                this.colorInputNode.value = _colorValue;
-                this.colorSelectNode.value = _colorValue;
+                this.colorInputNode.value = colorValue;
+                this.colorSelectNode.value = colorValue;
 
                 html.set(this.infoTextNode, this.messageString);
-                domStyle.set(this.infoTextNode, "background-color", _colorValue);
+                domStyle.set(this.infoTextNode, "background-color", colorValue);
             } else {
                 domStyle.set(this.domNode, "display", "none");
             }
@@ -151,19 +151,17 @@ define([
         },
 
         // Handle validations.
-        _handleValidation: function(_validations) {
+        _handleValidation: function(validations) {
             this._clearValidations();
 
-            var _validation = _validations[0],
-                _message = _validation.getReasonByAttribute(this.backgroundColor);
+            var validation = validations[0],
+                message = validation.getReasonByAttribute(this.backgroundColor);
 
             if (this.readOnly) {
-                _validation.removeAttribute(this.backgroundColor);
-            } else {
-                if (_message) {
-                    this._addValidation(_message);
-                    _validation.removeAttribute(this.backgroundColor);
-                }
+                validation.removeAttribute(this.backgroundColor);
+            } else if (message) {
+                this._addValidation(message);
+                validation.removeAttribute(this.backgroundColor);
             }
         },
 
@@ -193,10 +191,6 @@ define([
 
         // Reset subscriptions.
         _resetSubscriptions: function() {
-            var _objectHandle = null,
-                _attrHandle = null,
-                _validationHandle = null;
-
             // Release handles on previous object, if any.
             if (this._handles) {
                 this._handles.forEach(function(handle) {
@@ -207,14 +201,14 @@ define([
 
             // When a mendix object exists create subscribtions. 
             if (this._contextObj) {
-                _objectHandle = this.subscribe({
+                var objectHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),
                     callback: lang.hitch(this, function(guid) {
                         this._updateRendering();
                     })
                 });
 
-                _attrHandle = this.subscribe({
+                var attrHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),
                     attr: this.backgroundColor,
                     callback: lang.hitch(this, function(guid, attr, attrValue) {
@@ -222,13 +216,13 @@ define([
                     })
                 });
 
-                _validationHandle = this.subscribe({
+                var validationHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),
                     val: true,
                     callback: lang.hitch(this, this._handleValidation)
                 });
 
-                this._handles = [_objectHandle, _attrHandle, _validationHandle];
+                this._handles = [ objectHandle, attrHandle, validationHandle ];
             }
         }
     });
