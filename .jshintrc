@@ -18,6 +18,5 @@
     // Environments
     "browser"  : true,
     "devel"    : true,
-    "dojo"     : true,
-    "jquery"   : true
+    "dojo"     : true
 }
