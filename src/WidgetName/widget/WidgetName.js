@@ -39,8 +39,7 @@ define([
     var $ = _jQuery.noConflict(true);
     
     // Declare widget's prototype.
-    return declare("WidgetName.widget.WidgetName", [_WidgetBase, _TemplatedMixin], {
-
+    return declare("WidgetName.widget.WidgetName", [ _WidgetBase, _TemplatedMixin ], {
         // _TemplatedMixin will create our dom node using this HTML template.
         templateString: widgetTemplate,
 
@@ -100,14 +99,12 @@ define([
 
         // Attach events to HTML dom elements
         _setupEvents: function() {
-
             this.connect(this.colorSelectNode, "change", function(e) {
                 // Function from mendix object to set an attribute.
                 this._contextObj.set(this.backgroundColor, this.colorSelectNode.value);
             });
 
             this.connect(this.infoTextNode, "click", function(e) {
-
                 // Only on mobile stop event bubbling!
                 this._stopBubblingEventOnMobile(e);
 
@@ -117,7 +114,7 @@ define([
                         params: {
                             applyto: "selection",
                             actionname: this.mfToExecute,
-                            guids: [this._contextObj.getGuid()]
+                            guids: [ this._contextObj.getGuid() ]
                         },
                         callback: function(obj) {
                             //TODO what to do when all is ok!
@@ -127,14 +124,11 @@ define([
                         })
                     }, this);
                 }
-
             });
-
         },
 
         // Rerender the interface.
         _updateRendering: function() {
-
             this.colorSelectNode.disabled = this.readOnly;
             this.colorInputNode.disabled = this.readOnly;
 
@@ -213,7 +207,6 @@ define([
 
             // When a mendix object exists create subscribtions. 
             if (this._contextObj) {
-
                 _objectHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),
                     callback: lang.hitch(this, function(guid) {
@@ -240,6 +233,7 @@ define([
         }
     });
 });
+
 require(["WidgetName/widget/WidgetName"], function() {
     "use strict";
 });
