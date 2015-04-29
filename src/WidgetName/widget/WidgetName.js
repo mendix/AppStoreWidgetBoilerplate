@@ -19,16 +19,16 @@
 
 // Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
 define([
-    'dojo/_base/declare', 'mxui/widget/_WidgetBase', 'dijit/_TemplatedMixin',
-    'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/_base/lang', 'dojo/text', 'dojo/html', 'dojo/_base/event',
-    'WidgetName/lib/jquery-1.11.2', 'dojo/text!WidgetName/widget/template/WidgetName.html'
+    "dojo/_base/declare", "mxui/widget/_WidgetBase", "dijit/_TemplatedMixin",
+    "mxui/dom", "dojo/dom", "dojo/query", "dojo/dom-prop", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style", "dojo/dom-construct", "dojo/_base/array", "dojo/_base/lang", "dojo/text", "dojo/html", "dojo/_base/event",
+    "WidgetName/lib/jquery-1.11.2.min", "dojo/text!WidgetName/widget/template/WidgetName.html"
 ], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, lang, text, html, event, _jQuery, widgetTemplate) {
-    'use strict';
+    "use strict";
 
     var $ = _jQuery.noConflict(true);
     
     // Declare widget's prototype.
-    return declare('WidgetName.widget.WidgetName', [_WidgetBase, _TemplatedMixin], {
+    return declare("WidgetName.widget.WidgetName", [_WidgetBase, _TemplatedMixin], {
 
         // _TemplatedMixin will create our dom node using this HTML template.
         templateString: widgetTemplate,
@@ -50,14 +50,14 @@ define([
 
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function () {
-            console.log(this.id + '.postCreate');
+            console.log(this.id + ".postCreate");
             this._updateRendering();
             this._setupEvents();
         },
 
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function (obj, callback) {
-            console.log(this.id + '.update');
+            console.log(this.id + ".update");
 
             this._contextObj = obj;
             this._resetSubscriptions();
@@ -82,7 +82,7 @@ define([
 
         // We want to stop events on a mobile device
         _stopBubblingEventOnMobile: function (e) {
-            if (typeof document.ontouchstart !== 'undefined') {
+            if (typeof document.ontouchstart !== "undefined") {
                 event.stop(e);
             }
         },
@@ -90,21 +90,21 @@ define([
         // Attach events to HTML dom elements
         _setupEvents: function () {
 
-            this.connect(this.colorSelectNode, 'change', function (e) {
+            this.connect(this.colorSelectNode, "change", function (e) {
                 // Function from mendix object to set an attribute.
                 this._contextObj.set(this.backgroundColor, this.colorSelectNode.value);
             });
 
-            this.connect(this.infoTextNode, 'click', function (e) {
+            this.connect(this.infoTextNode, "click", function (e) {
 
                 // Only on mobile stop event bubbling!
                 this._stopBubblingEventOnMobile(e);
 
                 // If a microflow has been set execute the microflow on a click.
-                if (this.mfToExecute !== '') {
+                if (this.mfToExecute !== "") {
                     mx.data.action({
                         params: {
-                            applyto: 'selection',
+                            applyto: "selection",
                             actionname: this.mfToExecute,
                             guids: [this._contextObj.getGuid()]
                         },
@@ -112,7 +112,7 @@ define([
                             //TODO what to do when all is ok!
                         },
                         error: lang.hitch(this, function (error) {
-                            console.log(this.id + ': An error occurred while executing microflow: ' + error.description);
+                            console.log(this.id + ": An error occurred while executing microflow: " + error.description);
                         })
                     }, this);
                 }
@@ -128,7 +128,7 @@ define([
             this.colorInputNode.disabled = this.readOnly;
 
             if (this._contextObj !== null) {
-                domStyle.set(this.domNode, 'display', 'block');
+                domStyle.set(this.domNode, "display", "block");
 
                 var _colorValue = this._contextObj.get(this.backgroundColor);
 
@@ -136,9 +136,9 @@ define([
                 this.colorSelectNode.value = _colorValue;
 
                 html.set(this.infoTextNode, this.messageString);
-                domStyle.set(this.infoTextNode, 'background-color', _colorValue);
+                domStyle.set(this.infoTextNode, "background-color", _colorValue);
             } else {
-                domStyle.set(this.domNode, 'display', 'none');
+                domStyle.set(this.domNode, "display", "none");
             }
 
             // Important to clear all validations!
@@ -175,8 +175,8 @@ define([
                 return true;
             }
             this._alertDiv = domConstruct.create("div", {
-                'class': 'alert alert-danger',
-                'innerHTML': message
+                "class": "alert alert-danger",
+                "innerHTML": message
             });
             domConstruct.place(this.domNode, this._alertdiv);
         },
@@ -229,6 +229,6 @@ define([
         }
     });
 });
-require(['WidgetName/widget/WidgetName'], function () {
-    'use strict';
+require(["WidgetName/widget/WidgetName"], function () {
+    "use strict";
 });
