@@ -21,11 +21,11 @@
 define([
     'dojo/_base/declare', 'mxui/widget/_WidgetBase', 'dijit/_TemplatedMixin',
     'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/_base/lang', 'dojo/text', 'dojo/html', 'dojo/_base/event',
-    'WidgetName/lib/jquery-1.11.2.min', 'dojo/text!WidgetName/widget/template/WidgetName.html'
+    'WidgetName/lib/jquery-1.11.2', 'dojo/text!WidgetName/widget/template/WidgetName.html'
 ], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, lang, text, html, event, _jQuery, widgetTemplate) {
     'use strict';
 
-    var $ = jQuery.noConflict(true);
+    var $ = _jQuery.noConflict(true);
     
     // Declare widget's prototype.
     return declare('WidgetName.widget.WidgetName', [_WidgetBase, _TemplatedMixin], {
