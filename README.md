@@ -56,6 +56,9 @@ If your widget does not need jQuery:
 - Remove _jQuery from the parameter list of the declare call
 - Remove jquery.js from src\WidgetName\widget\lib\ Or remove the lib folder if you don't include external libraries in the widget.
 
+### AMD caveats
+Working with jQuery can be difficult due to the fact that jquery does not adhere to the AMD standard correctly. Check out [Pull Request #13](https://github.com/mendix/AppStoreWidgetBoilerplate/pull/13) or the [Dojo AMD documentation](http://dojotoolkit.org/documentation/tutorials/1.10/modules/index.html) for details.
+
 ## Migrating a widget to Dojo AMD
 
 A widget that uses Dojo AMD may not refer to functions like *dojo.query* etc. All necessary modules must be declared on the module list at the top of the source.
