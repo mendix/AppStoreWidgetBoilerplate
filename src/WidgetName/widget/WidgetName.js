@@ -164,8 +164,8 @@ define([
 
         // Clear validations.
         _clearValidations: function () {
-            domConstruct.destroy(this._alertdiv);
-            this._alertdiv = null;
+            domConstruct.destroy(this._alertDiv);
+            this._alertDiv = null;
         },
 
         // Show an error message.
@@ -194,10 +194,11 @@ define([
 
             // Release handles on previous object, if any.
             if (this._handles) {
-                this._handles.forEach(function (handle, i) {
-                    mx.data.unsubscribe(handle);
-                });
-                this._handles = [];
+                
+				dojoArray.forEach(this._handles, function (handle, i) {
+					mx.data.unsubscribe(handle);
+				});
+				this._handles = [];	
             }
 
             // When a mendix object exists create subscribtions. 
