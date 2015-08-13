@@ -178,7 +178,7 @@ define([
 				'class': 'alert alert-danger',
 				'innerHTML': message
 			});
-			domConstruct.place(this.domNode, this._alertdiv);
+			domConstruct.place(this._alertDiv, this.domNode);
 		},
 
 		// Add a validation.
