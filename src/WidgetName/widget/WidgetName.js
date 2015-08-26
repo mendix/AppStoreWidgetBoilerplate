@@ -44,6 +44,7 @@ define([
         templateString: widgetTemplate,
 
         // DOM elements
+        inputNodes: null,
         colorSelectNode: null,
         colorInputNode: null,
         infoTextNode: null,
