@@ -66,15 +66,12 @@ define([
 
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function() {
-            console.log(this.id + ".postCreate");
             this._updateRendering();
             this._setupEvents();
         },
 
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function(obj, callback) {
-            console.log(this.id + ".update");
-
             this._contextObj = obj;
             this._resetSubscriptions();
             this._updateRendering();
@@ -126,7 +123,7 @@ define([
                             //TODO what to do when all is ok!
                         },
                         error: dojoLang.hitch(this, function(error) {
-                            console.log(this.id + ": An error occurred while executing microflow: " + error.description);
+                            console.error(this.id + ": An error occurred while executing microflow: " + error.description);
                         })
                     }, this);
                 }
