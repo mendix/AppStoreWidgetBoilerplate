@@ -31,7 +31,7 @@ define([
     "dojo/text",
     "dojo/html",
     "dojo/_base/event",
-    "WidgetName/lib/jquery-1.11.2.min",
+    "WidgetName/lib/jquery-1.11.2",
     "dojo/text!WidgetName/widget/template/WidgetName.html"
 ], function(declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, dojoLang, dojoText, dojoHtml, dojoEvent, _jQuery, widgetTemplate) {
     "use strict";
