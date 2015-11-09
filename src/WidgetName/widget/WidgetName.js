@@ -199,7 +199,7 @@ define([
         _resetSubscriptions: function() {
             // Release handles on previous object, if any.
             if (this._handles) {
-                this._handles.forEach(function(handle) {
+                dojoArray.forEach(this._handles, function (handle) {
                     mx.data.unsubscribe(handle);
                 });
                 this._handles = [];
