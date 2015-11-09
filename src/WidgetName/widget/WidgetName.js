@@ -173,8 +173,8 @@ define([
 
         // Clear validations.
         _clearValidations: function() {
-            dojoConstruct.destroy(this._alertdiv);
-            this._alertdiv = null;
+            dojoConstruct.destroy(this._alertDiv);
+            this._alertDiv = null;
         },
 
         // Show an error message.
@@ -187,7 +187,7 @@ define([
                 "class": "alert alert-danger",
                 "innerHTML": message
             });
-            dojoConstruct.place(this.domNode, this._alertdiv);
+            dojoConstruct.place(this.domNode, this._alertDiv);
         },
 
         // Add a validation.
