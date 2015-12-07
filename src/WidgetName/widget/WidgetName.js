@@ -1,3 +1,4 @@
+/*global logger*/
 /*
     WidgetName
     ========================
@@ -19,6 +20,7 @@ define([
     "dojo/_base/declare",
     "mxui/widget/_WidgetBase",
     "dijit/_TemplatedMixin",
+
     "mxui/dom",
     "dojo/dom",
     "dojo/dom-prop",
@@ -31,13 +33,14 @@ define([
     "dojo/text",
     "dojo/html",
     "dojo/_base/event",
+
     "WidgetName/lib/jquery-1.11.2",
     "dojo/text!WidgetName/widget/template/WidgetName.html"
 ], function(declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, dojoLang, dojoText, dojoHtml, dojoEvent, _jQuery, widgetTemplate) {
     "use strict";
 
     var $ = _jQuery.noConflict(true);
-    
+
     // Declare widget's prototype.
     return declare("WidgetName.widget.WidgetName", [ _WidgetBase, _TemplatedMixin ], {
         // _TemplatedMixin will create our dom node using this HTML template.
@@ -66,14 +69,14 @@ define([
 
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function() {
-            console.log(this.id + ".postCreate");
+            logger.debug(this.id + ".postCreate");
             this._updateRendering();
             this._setupEvents();
         },
 
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function(obj, callback) {
-            console.log(this.id + ".update");
+            logger.debug(this.id + ".update");
 
             this._contextObj = obj;
             this._resetSubscriptions();
@@ -122,14 +125,14 @@ define([
                             actionname: this.mfToExecute,
                             guids: [ this._contextObj.getGuid() ]
                         },
-						store: {
-							caller: this.mxform
-						},
+                        store: {
+                            caller: this.mxform
+                        },
                         callback: function(obj) {
                             //TODO what to do when all is ok!
                         },
                         error: dojoLang.hitch(this, function(error) {
-                            console.log(this.id + ": An error occurred while executing microflow: " + error.description);
+                            logger.error(this.id + ": An error occurred while executing microflow: " + error.description);
                         })
                     }, this);
                 }
@@ -208,7 +211,7 @@ define([
                 this._handles = [];
             }
 
-            // When a mendix object exists create subscribtions. 
+            // When a mendix object exists create subscribtions.
             if (this._contextObj) {
                 var objectHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),
