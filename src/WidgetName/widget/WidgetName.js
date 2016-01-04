@@ -64,6 +64,9 @@ define([
 
         // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
         constructor: function() {
+            // Uncomment the following line to enable debug messages
+            //logger.level(logger.DEBUG);
+            logger.debug(this.id + ".constructor");
             this._handles = [];
         },
 
@@ -86,21 +89,29 @@ define([
         },
 
         // mxui.widget._WidgetBase.enable is called when the widget should enable editing. Implement to enable editing if widget is input widget.
-        enable: function() {},
+        enable: function() {
+          logger.debug(this.id + ".enable");
+        },
 
         // mxui.widget._WidgetBase.enable is called when the widget should disable editing. Implement to disable editing if widget is input widget.
-        disable: function() {},
+        disable: function() {
+          logger.debug(this.id + ".disable");
+        },
 
         // mxui.widget._WidgetBase.resize is called when the page's layout is recalculated. Implement to do sizing calculations. Prefer using CSS instead.
-        resize: function(box) {},
+        resize: function(box) {
+          logger.debug(this.id + ".resize");
+        },
 
         // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. Implement to do special tear-down work.
         uninitialize: function() {
+          logger.debug(this.id + ".uninitialize");
             // Clean up listeners, helper objects, etc. There is no need to remove listeners added with this.connect / this.subscribe / this.own.
         },
 
         // We want to stop events on a mobile device
         _stopBubblingEventOnMobile: function(e) {
+            logger.debug(this.id + "._stopBubblingEventOnMobile");
             if (typeof document.ontouchstart !== "undefined") {
                 dojoEvent.stop(e);
             }
@@ -108,6 +119,7 @@ define([
 
         // Attach events to HTML dom elements
         _setupEvents: function() {
+            logger.debug(this.id + "._setupEvents");
             this.connect(this.colorSelectNode, "change", function(e) {
                 // Function from mendix object to set an attribute.
                 this._contextObj.set(this.backgroundColor, this.colorSelectNode.value);
@@ -141,6 +153,7 @@ define([
 
         // Rerender the interface.
         _updateRendering: function() {
+            logger.debug(this.id + "._updateRendering");
             this.colorSelectNode.disabled = this.readOnly;
             this.colorInputNode.disabled = this.readOnly;
 
@@ -164,6 +177,7 @@ define([
 
         // Handle validations.
         _handleValidation: function(validations) {
+            logger.debug(this.id + "._handleValidation");
             this._clearValidations();
 
             var validation = validations[0],
@@ -179,12 +193,14 @@ define([
 
         // Clear validations.
         _clearValidations: function() {
+            logger.debug(this.id + "._clearValidations");
             dojoConstruct.destroy(this._alertDiv);
             this._alertDiv = null;
         },
 
         // Show an error message.
         _showError: function(message) {
+            logger.debug(this.id + "._showError");
             if (this._alertDiv !== null) {
                 dojoHtml.set(this._alertDiv, message);
                 return true;
@@ -198,11 +214,13 @@ define([
 
         // Add a validation.
         _addValidation: function(message) {
+            logger.debug(this.id + "._addValidation");
             this._showError(message);
         },
 
         // Reset subscriptions.
         _resetSubscriptions: function() {
+            logger.debug(this.id + "._resetSubscriptions");
             // Release handles on previous object, if any.
             if (this._handles) {
                 dojoArray.forEach(this._handles, function (handle) {
