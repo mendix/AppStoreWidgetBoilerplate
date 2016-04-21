@@ -258,6 +258,4 @@ define([
     });
 });
 
-require(["WidgetName/widget/WidgetName"], function() {
-    "use strict";
-});
+require(["WidgetName/widget/WidgetName"]);
