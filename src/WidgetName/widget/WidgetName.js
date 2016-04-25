@@ -209,7 +209,7 @@ define([
                 "class": "alert alert-danger",
                 "innerHTML": message
             });
-            dojoConstruct.place(this.domNode, this._alertDiv);
+            dojoConstruct.place(this._alertDiv, this.domNode);
         },
 
         // Add a validation.
