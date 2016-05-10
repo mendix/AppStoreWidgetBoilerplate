@@ -104,6 +104,7 @@ define([
         // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. Implement to do special tear-down work.
         uninitialize: function() {
           logger.debug(this.id + ".uninitialize");
+          this._unsubscribe();
             // Clean up listeners, helper objects, etc. There is no need to remove listeners added with this.connect / this.subscribe / this.own.
         },
 
@@ -216,27 +217,31 @@ define([
             this._showError(message);
         },
 
+        _unsubscribe: function () {
+          if (this._handles) {
+              dojoArray.forEach(this._handles, function (handle) {
+                  mx.data.unsubscribe(handle);
+              });
+              this._handles = [];
+          }
+        },
+
         // Reset subscriptions.
         _resetSubscriptions: function() {
             logger.debug(this.id + "._resetSubscriptions");
             // Release handles on previous object, if any.
-            if (this._handles) {
-                dojoArray.forEach(this._handles, function (handle) {
-                    mx.data.unsubscribe(handle);
-                });
-                this._handles = [];
-            }
+            this._unsubscribe();
 
             // When a mendix object exists create subscribtions.
             if (this._contextObj) {
-                var objectHandle = this.subscribe({
+                var objectHandle = mx.data.subscribe({
                     guid: this._contextObj.getGuid(),
                     callback: dojoLang.hitch(this, function(guid) {
                         this._updateRendering();
                     })
                 });
 
-                var attrHandle = this.subscribe({
+                var attrHandle = mx.data.subscribe({
                     guid: this._contextObj.getGuid(),
                     attr: this.backgroundColor,
                     callback: dojoLang.hitch(this, function(guid, attr, attrValue) {
@@ -244,7 +249,7 @@ define([
                     })
                 });
 
-                var validationHandle = this.subscribe({
+                var validationHandle = mx.data.subscribe({
                     guid: this._contextObj.getGuid(),
                     val: true,
                     callback: dojoLang.hitch(this, this._handleValidation)
