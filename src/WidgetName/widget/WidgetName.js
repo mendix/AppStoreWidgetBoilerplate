@@ -207,7 +207,7 @@ define([
                 "class": "alert alert-danger",
                 "innerHTML": message
             });
-            dojoConstruct.place(this.domNode, this._alertDiv);
+            dojoConstruct.place(this._alertDiv, this.domNode);
         },
 
         // Add a validation.
@@ -256,6 +256,4 @@ define([
     });
 });
 
-require(["WidgetName/widget/WidgetName"], function() {
-    "use strict";
-});
+require(["WidgetName/widget/WidgetName"]);
