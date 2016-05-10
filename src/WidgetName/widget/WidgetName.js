@@ -83,9 +83,7 @@ define([
 
             this._contextObj = obj;
             this._resetSubscriptions();
-            this._updateRendering();
-
-            callback();
+            this._updateRendering(callback);
         },
 
         // mxui.widget._WidgetBase.enable is called when the widget should enable editing. Implement to enable editing if widget is input widget.
