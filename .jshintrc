@@ -9,7 +9,8 @@
     "undef"    : true,
     "globals"  : {
         "mendix" : false,
-        "mx"     : false
+        "mx"     : false,
+        "logger" : false
     },
 
     // Relaxing
