@@ -104,7 +104,6 @@ define([
         // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. Implement to do special tear-down work.
         uninitialize: function() {
           logger.debug(this.id + ".uninitialize");
-          this._unsubscribe();
             // Clean up listeners, helper objects, etc. There is no need to remove listeners added with this.connect / this.subscribe / this.own.
         },
 
