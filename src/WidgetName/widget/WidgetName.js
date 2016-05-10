@@ -61,11 +61,10 @@ define([
         _handles: null,
         _contextObj: null,
         _alertDiv: null,
+        _readOnly: false,
 
         // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
         constructor: function() {
-            // Uncomment the following line to enable debug messages
-            //logger.level(logger.DEBUG);
             logger.debug(this.id + ".constructor");
             this._handles = [];
         },
@@ -73,6 +72,11 @@ define([
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function() {
             logger.debug(this.id + ".postCreate");
+
+            if (this.readOnly || this.get("disabled") || this.readonly) {
+              this._readOnly = true;
+            }
+
             this._updateRendering();
             this._setupEvents();
         },
@@ -152,8 +156,8 @@ define([
         // Rerender the interface.
         _updateRendering: function() {
             logger.debug(this.id + "._updateRendering");
-            this.colorSelectNode.disabled = this.readOnly;
-            this.colorInputNode.disabled = this.readOnly;
+            this.colorSelectNode.disabled = this._readOnly;
+            this.colorInputNode.disabled = this._readOnly;
 
             if (this._contextObj !== null) {
                 dojoStyle.set(this.domNode, "display", "block");
@@ -181,7 +185,7 @@ define([
             var validation = validations[0],
                 message = validation.getReasonByAttribute(this.backgroundColor);
 
-            if (this.readOnly) {
+            if (this._readOnly) {
                 validation.removeAttribute(this.backgroundColor);
             } else if (message) {
                 this._addValidation(message);
