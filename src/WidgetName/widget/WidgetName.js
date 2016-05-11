@@ -237,28 +237,27 @@ define([
 
             // When a mendix object exists create subscribtions.
             if (this._contextObj) {
-                var objectHandle = mx.data.subscribe({
+                this._handles.push(mx.data.subscribe({
                     guid: this._contextObj.getGuid(),
                     callback: dojoLang.hitch(this, function(guid) {
                         this._updateRendering();
                     })
-                });
+                }));
 
-                var attrHandle = mx.data.subscribe({
+                this._handles.push(mx.data.subscribe({
                     guid: this._contextObj.getGuid(),
                     attr: this.backgroundColor,
                     callback: dojoLang.hitch(this, function(guid, attr, attrValue) {
                         this._updateRendering();
                     })
-                });
+                }));
 
-                var validationHandle = mx.data.subscribe({
+                this._handles.push( mx.data.subscribe({
                     guid: this._contextObj.getGuid(),
                     val: true,
                     callback: dojoLang.hitch(this, this._handleValidation)
-                });
-
-                this._handles = [ objectHandle, attrHandle, validationHandle ];
+                }));
+                
             }
         }
     });
