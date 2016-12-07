@@ -226,7 +226,7 @@ define([
         _unsubscribe: function () {
           if (this._handles) {
               dojoArray.forEach(this._handles, function (handle) {
-                  mx.data.unsubscribe(handle);
+                  this.unsubscribe(handle);
               });
               this._handles = [];
           }
@@ -240,14 +240,14 @@ define([
 
             // When a mendix object exists create subscribtions.
             if (this._contextObj) {
-                var objectHandle = mx.data.subscribe({
+                var objectHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),
                     callback: dojoLang.hitch(this, function (guid) {
                         this._updateRendering();
                     })
                 });
 
-                var attrHandle = mx.data.subscribe({
+                var attrHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),
                     attr: this.backgroundColor,
                     callback: dojoLang.hitch(this, function (guid, attr, attrValue) {
@@ -255,7 +255,7 @@ define([
                     })
                 });
 
-                var validationHandle = mx.data.subscribe({
+                var validationHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),
                     val: true,
                     callback: dojoLang.hitch(this, this._handleValidation)
