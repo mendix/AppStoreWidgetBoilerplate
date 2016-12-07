@@ -178,7 +178,7 @@ define([
             this._clearValidations();
 
             // The callback, coming from update, needs to be executed, to let the page know it finished rendering
-            mendix.lang.nullExec(callback);
+            this._executeCallback(callback);
         },
 
         // Handle validations.
@@ -264,6 +264,12 @@ define([
 
                 this._handles = [ objectHandle, attrHandle, validationHandle ];
             }
+        },
+
+        _executeCallback: function (cb) {
+          if (cb && typeof cb === "function") {
+            cb();
+          }
         }
     });
 });
