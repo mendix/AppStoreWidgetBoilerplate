@@ -36,7 +36,7 @@ define([
 
     "WidgetName/lib/jquery-1.11.2",
     "dojo/text!WidgetName/widget/template/WidgetName.html"
-], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, dojoLang, dojoText, dojoHtml, dojoEvent, _jQuery, widgetTemplate) {
+], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, lang, dojoText, dojoHtml, dojoEvent, _jQuery, widgetTemplate) {
     "use strict";
 
     var $ = _jQuery.noConflict(true);
@@ -133,24 +133,29 @@ define([
 
                 // If a microflow has been set execute the microflow on a click.
                 if (this.mfToExecute !== "") {
-                    mx.data.action({
-                        params: {
-                            applyto: "selection",
-                            actionname: this.mfToExecute,
-                            guids: [ this._contextObj.getGuid() ]
-                        },
-                        store: {
-                            caller: this.mxform
-                        },
-                        callback: function (obj) {
-                            //TODO what to do when all is ok!
-                        },
-                        error: dojoLang.hitch(this, function (error) {
-                            logger.error(this.id + ": An error occurred while executing microflow: " + error.description);
-                        })
-                    }, this);
+                    this._execMf(this.mfToExecute, this._contextObj.getGuid());
                 }
             });
+        },
+
+        _execMf: function (mf, guid, cb) {
+            logger.debug(this.id + "._execMf");
+            if (mf && guid) {
+                mx.ui.action(mf, {
+                    params: {
+                        applyto: "selection",
+                        guids: [guid]
+                    },
+                    callback: lang.hitch(this, function (objs) {
+                        if (cb && typeof cb === "function") {
+                            cb(objs);
+                        }
+                    }),
+                    error: function (error) {
+                        console.debug(error.description);
+                    }
+                }, this);
+            }
         },
 
         // Rerender the interface.
@@ -177,7 +182,7 @@ define([
             this._clearValidations();
 
             // The callback, coming from update, needs to be executed, to let the page know it finished rendering
-            this._executeCallback(callback);
+            this._executeCallback(callback, "_updateRendering");
         },
 
         // Handle validations.
@@ -223,52 +228,42 @@ define([
             this._showError(message);
         },
 
-        _unsubscribe: function () {
-          if (this._handles) {
-              dojoArray.forEach(this._handles, function (handle) {
-                  this.unsubscribe(handle);
-              });
-              this._handles = [];
-          }
-        },
-
         // Reset subscriptions.
         _resetSubscriptions: function () {
             logger.debug(this.id + "._resetSubscriptions");
             // Release handles on previous object, if any.
-            this._unsubscribe();
+            this.unsubscribeAll();
 
             // When a mendix object exists create subscribtions.
             if (this._contextObj) {
-                var objectHandle = this.subscribe({
+                this.subscribe({
                     guid: this._contextObj.getGuid(),
-                    callback: dojoLang.hitch(this, function (guid) {
+                    callback: lang.hitch(this, function (guid) {
                         this._updateRendering();
                     })
                 });
 
-                var attrHandle = this.subscribe({
+                this.subscribe({
                     guid: this._contextObj.getGuid(),
                     attr: this.backgroundColor,
-                    callback: dojoLang.hitch(this, function (guid, attr, attrValue) {
+                    callback: lang.hitch(this, function (guid, attr, attrValue) {
                         this._updateRendering();
                     })
                 });
 
-                var validationHandle = this.subscribe({
+                this.subscribe({
                     guid: this._contextObj.getGuid(),
                     val: true,
-                    callback: dojoLang.hitch(this, this._handleValidation)
+                    callback: lang.hitch(this, this._handleValidation)
                 });
-
-                this._handles = [ objectHandle, attrHandle, validationHandle ];
             }
         },
 
-        _executeCallback: function (cb) {
-          if (cb && typeof cb === "function") {
-            cb();
-          }
+        _executeCallback: function (cb, from) {
+            logger.debug(this.id + "._executeCallback" + (from ? " from " + from : ""));
+            if (cb && typeof cb === "function") {
+                cb();
+            }
         }
     });
 });
