@@ -152,7 +152,7 @@ define([
                         }
                     }),
                     error: function (error) {
-                        console.debug(error.description);
+                        console.debug(error.message);
                     }
                 }, this);
             }
