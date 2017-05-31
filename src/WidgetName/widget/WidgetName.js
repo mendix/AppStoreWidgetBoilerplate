@@ -152,7 +152,8 @@ define([
                         }
                     }),
                     error: function (error) {
-                        console.debug(error.message);
+                        mx.ui.error("Error executing microflow " + mf + " : " + error.message);
+                        console.error(this.id + "._execMf", error);
                     }
                 }, this);
             }
