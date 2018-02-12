@@ -146,11 +146,11 @@ define([
                         applyto: "selection",
                         guids: [guid]
                     },
-                    callback: lang.hitch(this, function (objs) {
+                    callback: function (objs) {
                         if (cb && typeof cb === "function") {
                             cb(objs);
                         }
-                    }),
+                    },
                     error: function (error) {
                         console.debug(error.message);
                     }
