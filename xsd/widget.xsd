@@ -63,6 +63,7 @@
             <xs:enumeration value="image"/>
             <xs:enumeration value="integer"/>
             <xs:enumeration value="microflow"/>
+            <xs:enumeration value="nanoflow"/>
             <xs:enumeration value="object"/>
             <xs:enumeration value="string"/>
             <xs:enumeration value="translatableString"/>
